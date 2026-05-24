@@ -24,3 +24,12 @@ AI-based system for detecting animal emotions and behaviour using audio and vide
 - Real-time detection
 - Cloud integration
 - Better emotion accuracy
+## Screenshots
+
+![Home](Screenshots/home-page.png)
+
+![Audio](Screenshots/audio-detection.png)
+
+![Video](Screenshots/video-detection.png)
+
+![Vaccination](Screenshots/vaccination.png)
