@@ -1,0 +1,724 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#  <meta charset="UTF-8">#}
+{#  <title>Login Page</title>#}
+{#  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">#}
+{##}
+{#  <style>#}
+{#    /* Full background */#}
+{#    body, html {#}
+{#      margin: 0;#}
+{#      padding: 0;#}
+{#      height: 100%;#}
+{#      font-family: "Segoe UI", sans-serif;#}
+{#    }#}
+{##}
+{#    .background {#}
+{#      background: url('https://www.shutterstock.com/image-photo/collage-pet-animals-ranging-fish-600nw-2468883097.jpg') no-repeat center center;#}
+{#      background-size: cover;#}
+{#      height: 100vh;#}
+{#      display: flex;#}
+{#      justify-content: flex-end; /* pushes login to right */#}
+{#    }#}
+{##}
+{#    /* Overlay for login form */#}
+{#    .login-container {#}
+{#      width: 40%;#}
+{#      min-width: 350px;#}
+{#      background: rgba(0, 0, 0, 0.6); /* transparent dark */#}
+{#      color: #fff;#}
+{#      display: flex;#}
+{#      flex-direction: column;#}
+{#      justify-content: center;#}
+{#      padding: 50px;#}
+{#    }#}
+{##}
+{#    .login-container h2 {#}
+{#      font-size: 28px;#}
+{#      margin-bottom: 10px;#}
+{#      font-weight: bold;#}
+{#    }#}
+{##}
+{#    .login-container p {#}
+{#      margin-bottom: 30px;#}
+{#      color: #ddd;#}
+{#    }#}
+{##}
+{#    .form-group label {#}
+{#      font-weight: 500;#}
+{#      margin-bottom: 5px;#}
+{#      display: block;#}
+{#    }#}
+{##}
+{#    .form-control {#}
+{#      background: rgba(255,255,255,0.1);#}
+{#      border: none;#}
+{#      border-radius: 6px;#}
+{#      color: #fff;#}
+{#      padding: 12px;#}
+{#      margin-bottom: 20px;#}
+{#    }#}
+{##}
+{#    .form-control::placeholder {#}
+{#      color: #ccc;#}
+{#    }#}
+{##}
+{#    /* Remember & Forgot */#}
+{#    .options {#}
+{#      display: flex;#}
+{#      justify-content: space-between;#}
+{#      align-items: center;#}
+{#      margin-bottom: 20px;#}
+{#      font-size: 14px;#}
+{#    }#}
+{##}
+{#    .options label {#}
+{#      cursor: pointer;#}
+{#    }#}
+{##}
+{#    .options a {#}
+{#      color: #fff;#}
+{#      text-decoration: none;#}
+{#    }#}
+{##}
+{#    .options a:hover {#}
+{#      text-decoration: underline;#}
+{#    }#}
+{##}
+{#    /* Login Button */#}
+{#    .btn-login {#}
+{#      width: 100%;#}
+{#      background: #000;#}
+{#      border: none;#}
+{#      padding: 12px;#}
+{#      border-radius: 6px;#}
+{#      color: #fff;#}
+{#      font-size: 16px;#}
+{#      font-weight: bold;#}
+{#      cursor: pointer;#}
+{#      transition: 0.3s;#}
+{#    }#}
+{##}
+{#    .btn-login:hover {#}
+{#      background: #222;#}
+{#    }#}
+{##}
+{#    /* Register text */#}
+{#    .register {#}
+{#      margin-top: 20px;#}
+{#      text-align: center;#}
+{#      font-size: 14px;#}
+{#    }#}
+{##}
+{#    .register a {#}
+{#      color: #4da6ff;#}
+{#      text-decoration: none;#}
+{#      font-weight: bold;#}
+{#    }#}
+{##}
+{#    .register a:hover {#}
+{#      text-decoration: underline;#}
+{#    }#}
+{#  </style>#}
+{#</head>#}
+{#<body>#}
+{#  <div class="background">#}
+{#    <div class="login-container">#}
+{#      <h2>ADMIN LOGIN</h2>#}
+{#      <p>Please enter your details.</p>#}
+{#      <form action="/login_post__" method="post">#}
+{#        <div class="form-group">#}
+{#          <label for="username">Username</label>#}
+{#          <input type="text" name="textfield" id="textfield2" class="form-control" placeholder="Enter username" required>#}
+{#        </div>#}
+{#        <div class="form-group">#}
+{#          <label for="password">Password</label>#}
+{#          <input type="text" name="textfield2" id="textfield3" class="form-control" placeholder="******" required>#}
+{#        </div>#}
+{#        <button type="submit" class="btn btn-info" name="button" id="button" value="LOGIN">Log in</button>#}
+{#      </form>#}
+{#    </div>#}
+{#  </div>#}
+{#</body>#}
+{#</html>#}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login | Pet Management System</title>
+
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* Reset & Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+    }
+
+    /* Animated Background */
+    .background {
+      position: relative;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* Animated Shapes */
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      animation: float 20s infinite;
+    }
+
+    .shape1 {
+      width: 300px;
+      height: 300px;
+      top: -100px;
+      left: -100px;
+      animation-delay: 0s;
+    }
+
+    .shape2 {
+      width: 400px;
+      height: 400px;
+      bottom: -150px;
+      right: -100px;
+      animation-delay: 2s;
+    }
+
+    .shape3 {
+      width: 200px;
+      height: 200px;
+      bottom: 50px;
+      left: 200px;
+      animation-delay: 4s;
+    }
+
+    .shape4 {
+      width: 150px;
+      height: 150px;
+      top: 100px;
+      right: 300px;
+      animation-delay: 6s;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+      }
+      50% {
+        transform: translateY(-30px) scale(1.1);
+      }
+    }
+
+    /* Main Container */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 20px;
+      display: flex;
+      justify-content: flex-end;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Glassmorphism Login Card */
+    .login-card {
+      width: 450px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 30px;
+      padding: 50px 40px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+      animation: slideIn 0.8s ease-out;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Logo/Brand Section */
+    .brand {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .brand-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .brand-icon i {
+      font-size: 40px;
+      color: white;
+    }
+
+    .brand h2 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 8px;
+    }
+
+    .brand p {
+      color: #666;
+      font-size: 15px;
+      font-weight: 400;
+    }
+
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 15px;
+      color: #667eea;
+      font-size: 16px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 15px 15px 15px 45px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s ease;
+      background: white;
+      color: #333;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+
+    .form-control::placeholder {
+      color: #aaa;
+      font-weight: 400;
+    }
+
+    /* Password visibility toggle */
+    .toggle-password {
+      position: absolute;
+      right: 15px;
+      color: #999;
+      cursor: pointer;
+      font-size: 16px;
+      transition: color 0.3s ease;
+    }
+
+    .toggle-password:hover {
+      color: #667eea;
+    }
+
+    /* Options Row */
+    .options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .remember-me input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #667eea;
+      cursor: pointer;
+    }
+
+    .remember-me label {
+      color: #555;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .forgot-link {
+      color: #667eea;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .forgot-link:hover {
+      color: #764ba2;
+      text-decoration: underline;
+    }
+
+    /* Login Button */
+    .btn-login {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-login:active {
+      transform: translateY(0);
+    }
+
+    .btn-login i {
+      font-size: 18px;
+    }
+
+    /* Divider */
+    .divider {
+      position: relative;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .divider::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: #e0e0e0;
+      transform: translateY(-50%);
+    }
+
+    .divider span {
+      position: relative;
+      background: white;
+      padding: 0 15px;
+      color: #999;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    /* Register Section */
+    .register {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .register p {
+      color: #666;
+      font-size: 15px;
+    }
+
+    .register a {
+      color: #667eea;
+      font-weight: 700;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .register a:hover {
+      color: #764ba2;
+      text-decoration: underline;
+    }
+
+    /* Alert Messages */
+    .alert {
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      animation: slideDown 0.5s ease;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .alert-error {
+      background: #fee;
+      border: 1px solid #fcc;
+      color: #c33;
+    }
+
+    .alert-success {
+      background: #efe;
+      border: 1px solid #cfc;
+      color: #3c3;
+    }
+
+    .alert i {
+      font-size: 16px;
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 30px;
+      text-align: center;
+      color: #999;
+      font-size: 12px;
+    }
+
+    .footer a {
+      color: #666;
+      text-decoration: none;
+      margin: 0 5px;
+    }
+
+    .footer a:hover {
+      color: #667eea;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container {
+        justify-content: center;
+      }
+
+      .login-card {
+        width: 100%;
+        max-width: 450px;
+        padding: 40px 25px;
+      }
+
+      .shape {
+        display: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .login-card {
+        padding: 30px 20px;
+      }
+
+      .brand h2 {
+        font-size: 24px;
+      }
+
+      .options {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="background">
+    <!-- Animated Background Shapes -->
+    <div class="shape shape1"></div>
+    <div class="shape shape2"></div>
+    <div class="shape shape3"></div>
+    <div class="shape shape4"></div>
+
+    <div class="container">
+      <!-- Login Card -->
+      <div class="login-card">
+        <!-- Brand Section -->
+        <div class="brand">
+          <div class="brand-icon">
+            <i class="fas fa-paw"></i>
+          </div>
+          <h2>Admin Login</h2>
+          <p>Welcome back! Please enter your credentials</p>
+        </div>
+
+
+
+        <!-- Login Form -->
+        <form action="/login_post__" method="post" id="loginForm">
+          <!-- Username Field -->
+          <div class="form-group">
+            <label for="username">
+              <i class="fas fa-user" style="margin-right: 5px;"></i> Username
+            </label>
+            <div class="input-wrapper">
+              <i class="fas fa-user input-icon"></i>
+              <input
+                type="text"
+                name="textfield"
+                id="username"
+                class="form-control"
+                placeholder="Enter your username"
+                autocomplete="off"
+                required
+              >
+            </div>
+          </div>
+
+          <!-- Password Field -->
+          <div class="form-group">
+            <label for="password">
+              <i class="fas fa-lock" style="margin-right: 5px;"></i> Password
+            </label>
+            <div class="input-wrapper">
+              <i class="fas fa-lock input-icon"></i>
+              <input
+                type="password"
+                name="textfield2"
+                id="password"
+                class="form-control"
+                placeholder="••••••••"
+                autocomplete="current-password"
+                required
+              >
+              <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+            </div>
+          </div>
+
+
+          <!-- Login Button -->
+          <button type="submit" class="btn-login" id="loginBtn">
+            <i class="fas fa-sign-in-alt"></i>
+            Sign In
+          </button>
+
+
+
+          <!-- Footer -->
+          <div class="footer">
+            <p>
+              <a href="#"><i class="fas fa-shield-alt"></i> Privacy</a> •
+              <a href="#"><i class="fas fa-file-alt"></i> Terms</a> •
+              <a href="#"><i class="fas fa-headset"></i> Support</a>
+            </p>
+            <p style="margin-top: 10px;">
+              &copy; 2026 Pet Management System. All rights reserved.
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Password visibility toggle
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+
+    togglePassword.addEventListener('click', function() {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+
+      // Toggle icon
+      this.classList.toggle('fa-eye');
+      this.classList.toggle('fa-eye-slash');
+    });
+
+    // Form submission with animation
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+
+    // Input focus effects
+    const inputs = document.querySelectorAll('.form-control');
+    inputs.forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'scale(1.01)';
+      });
+
+      input.addEventListener('blur', function() {
+        this.parentElement.style.transform = 'scale(1)';
+      });
+    });
+
+    // Smooth scroll to top
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  </script>
+</body>
+</html>

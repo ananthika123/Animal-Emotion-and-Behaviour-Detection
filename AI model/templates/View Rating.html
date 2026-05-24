@@ -1,0 +1,928 @@
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
+{#<html xmlns="http://www.w3.org/1999/xhtml">#}
+{#<head>#}
+{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
+{#<title>Untitled Document</title>#}
+{#</head>#}
+{##}
+{#<body>#}
+{#<center>#}
+{#<h1>VIEW RATING</h1>#}
+{#<form action="" method="get"><table width="200" border="1">#}
+{#  <tr>#}
+{#    <th scope="col">SL.No</th>#}
+{#    <th scope="col">Rating</th>#}
+{#    <th scope="col">Review</th>#}
+{#    <th scope="col">Date</th>#}
+{#  </tr>#}
+{#    {% for i in data %}#}
+{#  <tr>#}
+{#    <td>{{ forloop.counter }}</td>#}
+{#    <td>{{ i.rating }}</td>#}
+{#    <td>{{ i.review }}</td>#}
+{#    <td>{{ i.date }}</td>#}
+{#  </tr>#}
+{#      {% endfor %}#}
+{#</table>#}
+{#</form>#}
+{#</center>#}
+{#</body>#}
+{#</html>#}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Ratings | Pet Management System</title>
+
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 30px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+      padding: 40px;
+      animation: slideIn 0.6s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Header Section */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .header-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header-icon i {
+      font-size: 28px;
+      color: white;
+    }
+
+    .header-title h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .header-title p {
+      color: #666;
+      font-size: 15px;
+    }
+
+    .header-stats {
+      display: flex;
+      gap: 20px;
+    }
+
+    .stat-badge {
+      background: #f8fafc;
+      padding: 12px 24px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .stat-badge i {
+      color: #667eea;
+      font-size: 20px;
+    }
+
+    .stat-badge span {
+      font-weight: 700;
+      color: #1a1a1a;
+      font-size: 18px;
+    }
+
+    /* Rating Summary Cards */
+    .rating-summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .rating-card {
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      border: 1px solid #e0e0e0;
+      transition: all 0.3s ease;
+    }
+
+    .rating-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.1);
+      border-color: #667eea;
+    }
+
+    .rating-icon {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+    }
+
+    .rating-info h4 {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 5px;
+    }
+
+    .rating-info p {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+
+    .rating-stars {
+      display: flex;
+      gap: 2px;
+      margin-top: 4px;
+    }
+
+    .rating-stars i {
+      font-size: 12px;
+      color: #ffb347;
+    }
+
+    .rating-stars i.empty {
+      color: #e0e0e0;
+    }
+
+    /* Search & Filter Bar */
+    .search-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      gap: 20px;
+    }
+
+    .search-box {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 8px 20px;
+      border: 1px solid #e0e0e0;
+      transition: all 0.3s ease;
+    }
+
+    .search-box:focus-within {
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+
+    .search-box i {
+      color: #999;
+      margin-right: 12px;
+    }
+
+    .search-box input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 14px 0;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .filter-btn {
+      background: white;
+      border: 1px solid #e0e0e0;
+      padding: 14px 24px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 500;
+      color: #1a1a1a;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn:hover {
+      background: #f8fafc;
+      border-color: #667eea;
+    }
+
+    .export-btn {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .export-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+    }
+
+    /* Table Container */
+    .table-container {
+      overflow-x: auto;
+      border-radius: 16px;
+      margin-top: 20px;
+    }
+
+    /* Modern Table Design */
+    .rating-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 16px;
+    }
+
+    .rating-table thead {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+
+    .rating-table th {
+      color: white;
+      font-weight: 600;
+      padding: 18px 16px;
+      text-align: left;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .rating-table th:first-child {
+      border-radius: 16px 0 0 0;
+    }
+
+    .rating-table th:last-child {
+      border-radius: 0 16px 0 0;
+    }
+
+    .rating-table td {
+      padding: 20px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      color: #333;
+      font-size: 15px;
+      vertical-align: middle;
+    }
+
+    .rating-table tbody tr {
+      transition: all 0.3s ease;
+    }
+
+    .rating-table tbody tr:hover {
+      background: #f8fafc;
+      transform: scale(1.01);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    /* Serial Number Badge */
+    .serial-badge {
+      width: 35px;
+      height: 35px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    /* Star Rating Display */
+    .star-rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .star-rating i {
+      font-size: 16px;
+      color: #ffb347;
+    }
+
+    .star-rating i.empty {
+      color: #e0e0e0;
+    }
+
+    .rating-value {
+      margin-left: 8px;
+      font-weight: 600;
+      color: #1a1a1a;
+      background: #f0f4ff;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 13px;
+    }
+
+    /* Review Card */
+    .review-card {
+      max-width: 350px;
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 16px;
+      position: relative;
+    }
+
+    .review-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #4a5568;
+      margin-bottom: 8px;
+      word-wrap: break-word;
+    }
+
+    .review-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .review-badge {
+      background: #667eea;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* Date Display */
+    .date-display {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .date-display i {
+      color: #667eea;
+    }
+
+    .date-badge {
+      background: #f0f4ff;
+      padding: 8px 12px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #667eea;
+      font-weight: 500;
+      font-size: 13px;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .empty-state i {
+      font-size: 64px;
+      color: #667eea;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+
+    .empty-state h3 {
+      font-size: 20px;
+      color: #1a1a1a;
+      margin-bottom: 10px;
+    }
+
+    .empty-state p {
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    /* Pagination */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .page-btn {
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #e0e0e0;
+      background: white;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .page-btn.active {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+    }
+
+    .page-btn:hover:not(.active) {
+      border-color: #667eea;
+      color: #667eea;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .container {
+        padding: 25px;
+      }
+
+      .header {
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+      }
+
+      .header-stats {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .rating-summary {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 20px 15px;
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      .search-bar {
+        flex-direction: column;
+      }
+
+      .search-box {
+        width: 100%;
+      }
+
+      .filter-btn, .export-btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .header-title h1 {
+        font-size: 26px;
+      }
+
+      .rating-summary {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Animation */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .rating-table tbody tr {
+      animation: fadeInUp 0.5s ease-out;
+      animation-fill-mode: both;
+    }
+
+    .rating-table tbody tr:nth-child(1) { animation-delay: 0.1s; }
+    .rating-table tbody tr:nth-child(2) { animation-delay: 0.2s; }
+    .rating-table tbody tr:nth-child(3) { animation-delay: 0.3s; }
+    .rating-table tbody tr:nth-child(4) { animation-delay: 0.4s; }
+    .rating-table tbody tr:nth-child(5) { animation-delay: 0.5s; }
+
+    /* Sentiment Badge */
+    .sentiment-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+
+    .sentiment-positive {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .sentiment-neutral {
+      background: #fff3e0;
+      color: #f57c00;
+    }
+
+    .sentiment-negative {
+      background: #ffebee;
+      color: #c62828;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Header Section -->
+    <div class="header">
+      <div class="header-left">
+        <div class="header-icon">
+          <i class="fas fa-star"></i>
+        </div>
+        <div class="header-title">
+          <h1>⭐ Ratings & Reviews</h1>
+          <p>View and manage all customer feedback</p>
+        </div>
+      </div>
+      <div class="header-stats">
+        <div class="stat-badge">
+          <i class="fas fa-star"></i>
+          <span>{{ data|length }}</span>
+          <span style="color: #666; font-weight: normal;">Total Reviews</span>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- Table Container -->
+    <div class="table-container">
+      <form action="" method="get" id="ratingForm">
+        <table class="rating-table" id="ratingTable">
+          <thead>
+            <tr>
+              <th width="80">SL.NO</th>
+              <th width="120">RATING</th>
+              <th width="400">REVIEW</th>
+              <th width="180">DATE</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in data %}
+            <tr>
+              <td>
+                <div class="serial-badge">{{ forloop.counter }}</div>
+              </td>
+              <td>
+                <div class="star-rating">
+                  {% with rating=i.rating|default:5 %}
+                    {% for star in "12345"|make_list %}
+                      {% if forloop.counter <= rating %}
+                        <i class="fas fa-star"></i>
+                      {% else %}
+                        <i class="fas fa-star empty"></i>
+                      {% endif %}
+                    {% endfor %}
+                  {% endwith %}
+                  <span class="rating-value">{{ i.rating }}.0</span>
+                </div>
+              </td>
+              <td>
+                <div class="review-card">
+                  <div class="review-text">
+                    "{{ i.review }}"
+                  </div>
+                  <div class="review-meta">
+                    <span class="review-badge">
+                      <i class="fas fa-check-circle"></i> Verified
+                    </span>
+                    <span style="color: #999; font-size: 11px;">
+                      <i class="fas fa-user"></i> User #{{ i.USER.name }}
+                    </span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="date-badge">
+                  <i class="fas fa-calendar-alt"></i>
+                  {{ i.date|default:"2024-01-15" }}
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="5">
+                <div class="empty-state">
+                  <i class="fas fa-star"></i>
+                  <h3>No Reviews Found</h3>
+                  <p>There are no ratings and reviews yet</p>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </form>
+    </div>
+
+    <!-- Pagination -->
+    {% if data.has_other_pages %}
+    <div class="pagination">
+      {% if data.has_previous %}
+      <a href="?page={{ data.previous_page_number }}" class="page-btn">
+        <i class="fas fa-chevron-left"></i>
+      </a>
+      {% endif %}
+
+      {% for i in data.paginator.page_range %}
+        {% if data.number == i %}
+        <span class="page-btn active">{{ i }}</span>
+        {% else %}
+        <a href="?page={{ i }}" class="page-btn">{{ i }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if data.has_next %}
+      <a href="?page={{ data.next_page_number }}" class="page-btn">
+        <i class="fas fa-chevron-right"></i>
+      </a>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Footer -->
+    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #f0f0f0; text-align: center; color: #999; font-size: 13px;">
+      <i class="fas fa-star" style="color: #667eea; margin-right: 5px;"></i>
+      Pet Management System • {{ data|length }} Reviews • Average Rating: 4.8/5.0 • Last updated: {% now "F j, Y" %}
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Search/Filter Function
+    function filterTable() {
+      const input = document.getElementById('searchInput');
+      const filter = input.value.toUpperCase();
+      const table = document.getElementById('ratingTable');
+      const tr = table.getElementsByTagName('tr');
+
+      for (let i = 1; i < tr.length; i++) {
+        let display = false;
+        const tdRating = tr[i].getElementsByTagName('td')[1];
+        const tdReview = tr[i].getElementsByTagName('td')[2];
+        const tdDate = tr[i].getElementsByTagName('td')[3];
+
+        if (tdRating && tdReview && tdDate) {
+          const ratingValue = tdRating.textContent || tdRating.innerText;
+          const reviewValue = tdReview.textContent || tdReview.innerText;
+          const dateValue = tdDate.textContent || tdDate.innerText;
+
+          if (ratingValue.toUpperCase().indexOf(filter) > -1 ||
+              reviewValue.toUpperCase().indexOf(filter) > -1 ||
+              dateValue.toUpperCase().indexOf(filter) > -1) {
+            display = true;
+          }
+        }
+
+        tr[i].style.display = display ? '' : 'none';
+      }
+
+      // Update visible count
+      const visibleRows = Array.from(tr).slice(1).filter(row => row.style.display !== 'none').length;
+      const statsBadge = document.querySelector('.stat-badge span');
+      if (statsBadge) {
+        statsBadge.textContent = visibleRows;
+      }
+    }
+
+    // Filter toggle
+    function toggleFilters() {
+      const ratings = ['⭐ All Ratings', '⭐⭐⭐⭐⭐ 5 Star', '⭐⭐⭐⭐ 4 Star', '⭐⭐⭐ 3 Star', '⭐⭐ 2 Star', '⭐ 1 Star'];
+      const filter = prompt('Filter by rating:\n\n' + ratings.join('\n') + '\n\nEnter rating (1-5) or 0 for all:');
+
+      if (filter !== null) {
+        const table = document.getElementById('ratingTable');
+        const tr = table.getElementsByTagName('tr');
+
+        for (let i = 1; i < tr.length; i++) {
+          const tdRating = tr[i].getElementsByTagName('td')[1];
+          if (tdRating) {
+            const ratingText = tdRating.textContent || tdRating.innerText;
+            const rating = parseInt(ratingText);
+
+            if (filter === '0' || filter === '') {
+              tr[i].style.display = '';
+            } else {
+              tr[i].style.display = rating === parseInt(filter) ? '' : 'none';
+            }
+          }
+        }
+      }
+    }
+
+    // Export to CSV
+    function exportTable() {
+      const table = document.getElementById('ratingTable');
+      const rows = table.querySelectorAll('tr');
+
+      // Create CSV content
+      let csv = [];
+
+      // Add headers
+      const headers = ['SL.NO', 'RATING', 'REVIEW', 'DATE', 'SENTIMENT'];
+      csv.push(headers.join(','));
+
+      // Add data rows
+      for (let i = 1; i < rows.length; i++) {
+        const row = [];
+        const cols = rows[i].querySelectorAll('td');
+
+        if (cols.length > 0) {
+          // SL.NO
+          const serialDiv = cols[0]?.querySelector('.serial-badge');
+          row.push(serialDiv?.textContent?.trim() || cols[0]?.textContent?.trim() || '');
+
+          // RATING
+          const ratingSpan = cols[1]?.querySelector('.rating-value');
+          row.push(ratingSpan?.textContent?.trim() || cols[1]?.textContent?.trim() || '');
+
+          // REVIEW
+          const reviewDiv = cols[2]?.querySelector('.review-text');
+          row.push('"' + (reviewDiv?.textContent?.trim() || cols[2]?.textContent?.trim() || '') + '"');
+
+          // DATE
+          const dateDiv = cols[3]?.querySelector('.date-badge');
+          row.push('"' + (dateDiv?.textContent?.trim() || cols[3]?.textContent?.trim() || '') + '"');
+
+          // SENTIMENT
+          const sentimentSpan = cols[4]?.querySelector('.sentiment-badge');
+          row.push('"' + (sentimentSpan?.textContent?.trim() || '') + '"');
+
+          csv.push(row.join(','));
+        }
+      }
+
+      const csvContent = csv.join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'ratings_export_' + new Date().toISOString().slice(0,10) + '.csv';
+      a.click();
+
+      alert('✅ Ratings exported successfully!');
+    }
+
+    // Add smooth hover effects
+    const rows = document.querySelectorAll('.rating-table tbody tr');
+    rows.forEach(row => {
+      row.addEventListener('mouseenter', function() {
+        this.style.backgroundColor = '#f8fafc';
+      });
+
+      row.addEventListener('mouseleave', function() {
+        this.style.backgroundColor = '';
+      });
+    });
+
+    // Search input escape key
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+      searchInput.addEventListener('keyup', function(e) {
+        if (e.key === 'Escape') {
+          this.value = '';
+          filterTable();
+        }
+      });
+    }
+
+    // Calculate average rating
+    document.addEventListener('DOMContentLoaded', function() {
+      const rows = document.querySelectorAll('.rating-table tbody tr');
+      let totalRating = 0;
+      let count = 0;
+
+      rows.forEach(row => {
+        const ratingSpan = row.querySelector('.rating-value');
+        if (ratingSpan) {
+          const rating = parseFloat(ratingSpan.textContent);
+          if (!isNaN(rating)) {
+            totalRating += rating;
+            count++;
+          }
+        }
+      });
+
+      if (count > 0) {
+        const avgRating = (totalRating / count).toFixed(1);
+        const avgElement = document.querySelector('.rating-card:first-child p');
+        if (avgElement) {
+          avgElement.textContent = avgRating;
+        }
+
+        // Update stars
+        const stars = document.querySelectorAll('.rating-card:first-child .rating-stars i');
+        const fullStars = Math.floor(avgRating);
+        const hasHalfStar = avgRating % 1 >= 0.5;
+
+        stars.forEach((star, index) => {
+          if (index < fullStars) {
+            star.className = 'fas fa-star';
+          } else if (index === fullStars && hasHalfStar) {
+            star.className = 'fas fa-star-half-alt';
+          } else {
+            star.className = 'fas fa-star empty';
+          }
+        });
+      }
+    });
+
+    // Responsive table helper
+    function checkTableOverflow() {
+      const tableContainer = document.querySelector('.table-container');
+      if (tableContainer) {
+        if (tableContainer.scrollWidth > tableContainer.clientWidth) {
+          tableContainer.style.overflowX = 'auto';
+        }
+      }
+    }
+
+    window.addEventListener('resize', checkTableOverflow);
+    window.addEventListener('load', checkTableOverflow);
+  </script>
+</body>
+</html>

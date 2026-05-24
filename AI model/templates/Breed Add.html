@@ -1,0 +1,711 @@
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
+{#<html xmlns="http://www.w3.org/1999/xhtml">#}
+{#<head>#}
+{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
+{#<title>Untitled Document</title>#}
+{#</head>#}
+{##}
+{#<body>#}
+{#<center>#}
+{#<h1>ADD BREED DETAILS</h1>#}
+{#<form action="/add_breed_post/{{ id }}" method="post" enctype="multipart/form-data">#}
+{#  <table width="200" border="1">#}
+{#    <tr>#}
+{#      <th scope="row">Breed</th>#}
+{#      <td><label for="textfield"></label>#}
+{#      <input type="text" name="textfield" id="textfield" /></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row">Photo</th>#}
+{#      <td><label for="fileField"></label>#}
+{#      <input type="file" name="fileField" id="fileField" /></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row">Details</th>#}
+{#      <td><label for="textarea"></label>#}
+{#      <textarea name="textarea" id="textarea" cols="45" rows="5"></textarea></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th colspan="2" scope="row"><input type="submit" name="button" id="button" value="Add" /></th>#}
+{#    </tr>#}
+{#  </table>#}
+{#</form>#}
+{#</center>#}
+{#</body>#}
+{#</html>#}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Breed | Pet Management System</title>
+
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      background: white;
+      border-radius: 30px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+      padding: 40px;
+      animation: slideIn 0.6s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Header Section */
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .header-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+
+    .header-icon i {
+      font-size: 36px;
+      color: white;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+
+    .header p {
+      color: #666;
+      font-size: 15px;
+    }
+
+    /* Animal Info Badge */
+    .animal-info-badge {
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      border-left: 4px solid #667eea;
+    }
+
+    .animal-info-badge i {
+      font-size: 24px;
+      color: #667eea;
+    }
+
+    .animal-info-badge-content {
+      flex: 1;
+    }
+
+    .animal-info-badge-content h3 {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+
+    .animal-info-badge-content p {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    /* Form Table - Maintaining table structure */
+    .breed-form {
+      width: 100%;
+    }
+
+    .form-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .form-table tr {
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .form-table tr:last-child {
+      border-bottom: none;
+    }
+
+    .form-table th {
+      width: 120px;
+      padding: 20px 15px;
+      text-align: left;
+      font-weight: 600;
+      color: #333;
+      font-size: 15px;
+      background: #f8fafc;
+      border-radius: 10px 0 0 10px;
+      vertical-align: top;
+    }
+
+    .form-table td {
+      padding: 15px;
+      background: white;
+    }
+
+    /* Form Elements */
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 14px 18px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s ease;
+      background: white;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+
+    /* File Input Styling */
+    .file-input-wrapper {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .file-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #667eea;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    input[type="file"] {
+      position: relative;
+      width: 100%;
+      padding: 12px;
+      background: #f8fafc;
+      border: 2px dashed #667eea;
+      border-radius: 12px;
+      color: #333;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    input[type="file"]:hover {
+      border-color: #764ba2;
+      background: #f0f4ff;
+    }
+
+    input[type="file"]::file-selector-button {
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      margin-right: 15px;
+      transition: all 0.3s ease;
+    }
+
+    input[type="file"]::file-selector-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    /* Textarea */
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    /* Submit Button */
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none;
+      border-radius: 14px;
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+    }
+
+    .submit-btn i {
+      font-size: 18px;
+    }
+
+    /* Button Cell */
+    .button-cell {
+      text-align: center;
+      padding-top: 25px !important;
+      background: transparent !important;
+    }
+
+    /* Preview Section */
+    .preview-section {
+      margin-top: 25px;
+      padding: 20px;
+      background: #f8fafc;
+      border-radius: 16px;
+      display: none;
+    }
+
+    .preview-section.show {
+      display: block;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .preview-title {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .preview-image {
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: 16px;
+      border: 4px solid white;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    /* Info Message */
+    .info-message {
+      background: #f0f4ff;
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #667eea;
+      font-size: 14px;
+      border-left: 4px solid #667eea;
+    }
+
+    .info-message i {
+      font-size: 16px;
+    }
+
+    /* Character Counter */
+    .char-counter {
+      text-align: right;
+      font-size: 12px;
+      color: #999;
+      margin-top: 5px;
+    }
+
+    .char-counter i {
+      color: #667eea;
+      margin-right: 4px;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .container {
+        padding: 25px;
+      }
+
+      .form-table,
+      .form-table tbody,
+      .form-table tr,
+      .form-table th,
+      .form-table td {
+        display: block;
+      }
+
+      .form-table th {
+        width: 100%;
+        padding: 15px 15px 5px 15px;
+        border-radius: 10px 10px 0 0;
+      }
+
+      .form-table td {
+        padding: 5px 15px 15px 15px;
+      }
+
+      .header h1 {
+        font-size: 26px;
+      }
+
+      .animal-info-badge {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    /* Error States */
+    .error {
+      border-color: #ff4444 !important;
+    }
+
+    .error-message {
+      color: #ff4444;
+      font-size: 12px;
+      margin-top: 5px;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
+    /* Loading State */
+    .submit-btn.loading {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .submit-btn.loading i {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Breed Tips */
+    .breed-tips {
+      margin-top: 20px;
+      padding: 16px;
+      background: #fff9e6;
+      border-radius: 12px;
+      border-left: 4px solid #ffb347;
+    }
+
+    .breed-tips h4 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #b85e00;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .breed-tips ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .breed-tips li {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .breed-tips li i {
+      color: #ffb347;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Header with Icon -->
+    <div class="header">
+      <div class="header-icon">
+        <i class="fas fa-dna"></i>
+      </div>
+      <h1>🧬 Add Breed Details</h1>
+      <p>Register a new breed for this animal</p>
+    </div>
+
+
+    <!-- Info Message -->
+    <div class="info-message">
+      <i class="fas fa-info-circle"></i>
+      <span>Fill in the breed details below. All fields are required.</span>
+    </div>
+
+    <!-- Form - Maintains same action and method with Django template syntax -->
+    <form action="/add_breed_post/{{ id }}" method="post" enctype="multipart/form-data" class="breed-form" id="breedForm">
+      <table class="form-table" border="0">
+        <!-- Breed Name Field -->
+        <tr>
+          <th scope="row">
+            <i class="fas fa-tag" style="color: #667eea; margin-right: 8px;"></i>
+            Breed
+          </th>
+          <td>
+            <input type="text" name="textfield" id="textfield" placeholder="Enter breed name (e.g., Golden Retriever, Persian Cat)" required/>
+            <div class="error-message" id="breedError">Please enter breed name</div>
+          </td>
+        </tr>
+
+        <!-- Breed Photo Field -->
+        <tr>
+          <th scope="row">
+            <i class="fas fa-camera" style="color: #667eea; margin-right: 8px;"></i>
+            Photo
+          </th>
+          <td>
+            <div class="file-input-wrapper">
+              <div class="file-label">
+                <i class="fas fa-cloud-upload-alt"></i>
+                Upload Breed Image:
+              </div>
+              <input type="file" name="fileField" id="fileField" accept="image/*" required/>
+              <div style="font-size: 12px; color: #999; margin-top: 5px;">
+                <i class="fas fa-info-circle"></i> Supported formats: JPG, PNG, GIF. Max size: 5MB
+              </div>
+            </div>
+            <div class="error-message" id="fileError">Please select a breed image</div>
+          </td>
+        </tr>
+
+        <!-- Breed Details Field -->
+        <tr>
+          <th scope="row">
+            <i class="fas fa-file-alt" style="color: #667eea; margin-right: 8px;"></i>
+            Details
+          </th>
+          <td>
+            <textarea name="textarea" id="textarea" placeholder="Enter breed details (characteristics, temperament, size, lifespan, care tips, etc.)" required></textarea>
+            <div class="char-counter">
+              <i class="fas fa-text-height"></i>
+              <span id="charCount">0</span>/500 characters
+            </div>
+            <div class="error-message" id="detailsError">Please enter breed details</div>
+          </td>
+        </tr>
+
+        <!-- Submit Button -->
+        <tr>
+          <td colspan="2" class="button-cell">
+            <button type="submit" class="submit-btn" id="submitBtn">
+              <i class="fas fa-plus-circle"></i>
+              ADD BREED
+            </button>
+          </td>
+        </tr>
+      </table>
+    </form>
+
+    <!-- Image Preview Section -->
+    <div class="preview-section" id="previewSection">
+      <div class="preview-title">
+        <i class="fas fa-eye" style="color: #667eea;"></i>
+        Breed Image Preview
+      </div>
+      <img id="previewImage" class="preview-image" src="" alt="Breed Preview" />
+    </div>
+
+    <!-- Breed Information Tips -->
+    <div class="breed-tips">
+      <h4>
+        <i class="fas fa-lightbulb"></i>
+        Tips for adding breed details:
+      </h4>
+      <ul>
+        <li><i class="fas fa-check-circle"></i> Include specific breed name (e.g., "Siamese" not just "Cat")</li>
+        <li><i class="fas fa-check-circle"></i> Add characteristic features and temperament</li>
+        <li><i class="fas fa-check-circle"></i> Mention average size and weight range</li>
+        <li><i class="fas fa-check-circle"></i> Include typical lifespan and care requirements</li>
+        <li><i class="fas fa-check-circle"></i> Upload a clear, representative image of the breed</li>
+      </ul>
+    </div>
+
+    <!-- Back Link -->
+    <div style="text-align: center; margin-top: 25px;">
+      <a href="/viewAnimal__" style="color: #667eea; text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 10px; transition: all 0.3s ease;">
+        <i class="fas fa-arrow-left"></i>
+        Back to Animal List
+      </a>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Image Preview
+    const fileInput = document.getElementById('fileField');
+    const previewSection = document.getElementById('previewSection');
+    const previewImage = document.getElementById('previewImage');
+
+    fileInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        // Validate file size (5MB limit)
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        if (file.size > maxSize) {
+          alert('File size too large. Maximum size is 5MB.');
+          this.value = '';
+          previewSection.classList.remove('show');
+          return;
+        }
+
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+          alert('Please select an image file.');
+          this.value = '';
+          previewSection.classList.remove('show');
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          previewImage.src = e.target.result;
+          previewSection.classList.add('show');
+        }
+        reader.readAsDataURL(file);
+
+        // Remove error if file is selected
+        this.classList.remove('error');
+        document.getElementById('fileError').classList.remove('show');
+      } else {
+        previewSection.classList.remove('show');
+      }
+    });
+
+    // Character counter for details
+    const detailsInput = document.getElementById('textarea');
+    const charCount = document.getElementById('charCount');
+
+    detailsInput.addEventListener('input', function() {
+      const count = this.value.length;
+      charCount.textContent = count;
+
+      // Visual warning at 450 characters
+      if (count > 450) {
+        charCount.style.color = '#ff4444';
+      } else {
+        charCount.style.color = '#667eea';
+      }
+    });
+
+    // Form Validation
+    const form = document.getElementById('breedForm');
+    const breedInput = document.getElementById('textfield');
+    const detailsInput = document.getElementById('textarea');
+    const submitBtn = document.getElementById('submitBtn');
+
+    // Real-time validation
+    breedInput.addEventListener('input', function() {
+      if (this.value.trim()) {
+        this.classList.remove('error');
+        document.getElementById('breedError').classList.remove('show');
+      }
+    });
+
+    detailsInput.addEventListener('input', function() {
+      if (this.value.trim()) {
+        this.classList.remove('error');
+        document.getElementById('detailsError').classList.remove('show');
+      }
+    });
+
+    // Input focus effects
+    const inputs = document.querySelectorAll('input[type="text"], textarea, input[type="file"]');
+    inputs.forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'scale(1.01)';
+      });
+
+      input.addEventListener('blur', function() {
+        this.parentElement.style.transform = 'scale(1)';
+      });
+    });
+
+    // Auto-capitalize breed name
+    breedInput.addEventListener('blur', function() {
+      if (this.value.trim()) {
+        // Capitalize first letter of each word
+        this.value = this.value.split(' ').map(word => {
+          return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+        }).join(' ');
+      }
+    });
+
+    // Confirm before leaving if form is dirty
+    let formDirty = false;
+    form.addEventListener('input', function() {
+      formDirty = true;
+    });
+
+    window.addEventListener('beforeunload', function(e) {
+      if (formDirty) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
+
+    // Set minimum height for textarea
+    detailsInput.style.minHeight = '120px';
+  </script>
+</body>
+</html>

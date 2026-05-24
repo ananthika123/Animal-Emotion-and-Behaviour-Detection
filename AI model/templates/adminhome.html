@@ -1,0 +1,713 @@
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
+{#<html xmlns="http://www.w3.org/1999/xhtml">#}
+{#<head>#}
+{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
+{#<title>Untitled Document</title>#}
+{#</head>#}
+{##}
+{#<body>#}
+{#<h1>HOME PAGE</h1>#}
+{#<a href="addAnimal__">Add Animal</a><br><br>#}
+{#<a href="viewAnimal__">View Animal</a><br><br>#}
+{#<a href="viewUser__">View User</a><br><br>#}
+{#<a href="viewRating__">View Rating</a><br><br>#}
+{#<a href="changePassword__">Change Password</a><br><br>#}
+{##}
+{##}
+{#</body>#}
+{#</html>#}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Pet Management System</title>
+
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Chart.js for analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    /* Reset & Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+    }
+
+    /* Layout */
+    .dashboard {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ========== SIDEBAR ========== */
+    .sidebar {
+      width: 280px;
+      background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+      color: white;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 30px;
+    }
+
+    .brand-icon {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .brand-text h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .brand-text p {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    /* Admin Profile */
+    .admin-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      margin-bottom: 30px;
+    }
+
+    .admin-avatar {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .admin-info h4 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .admin-info p {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    /* Navigation Menu */
+    .nav-menu {
+      flex: 1;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      color: #cbd5e1;
+      text-decoration: none;
+      border-radius: 10px;
+      margin-bottom: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-item i {
+      width: 20px;
+      text-align: center;
+    }
+
+    .nav-item:hover {
+      background: rgba(59, 130, 246, 0.1);
+      color: white;
+    }
+
+    .nav-item.active {
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+      color: white;
+    }
+
+    .nav-divider {
+      margin: 20px 0;
+      border: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* ========== MAIN CONTENT ========== */
+    .main-content {
+      flex: 1;
+      margin-left: 280px;
+      padding: 30px;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      background: white;
+      padding: 20px 30px;
+      border-radius: 16px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    .header-title h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+
+    .header-title p {
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border-radius: 12px;
+      padding: 8px 16px;
+    }
+
+    .search-box i {
+      color: #64748b;
+      margin-right: 10px;
+    }
+
+    .search-box input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 14px;
+      width: 200px;
+    }
+
+    .notification-btn {
+      position: relative;
+      background: #f1f5f9;
+      border: none;
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .notification-btn:hover {
+      background: #e2e8f0;
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: #ef4444;
+      color: white;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+
+    /* Stats Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 24px;
+      border-radius: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-info h3 {
+      color: #64748b;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .stat-info .stat-number {
+      font-size: 32px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .stat-info .stat-trend {
+      font-size: 12px;
+      color: #10b981;
+    }
+
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .stat-icon.blue { background: linear-gradient(135deg, #3b82f6, #60a5fa); }
+    .stat-icon.green { background: linear-gradient(135deg, #10b981, #34d399); }
+    .stat-icon.purple { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
+    .stat-icon.orange { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+
+    .stat-icon i { color: white; }
+
+    /* Dashboard Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+
+    /* Card Styles */
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .card-header h2 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .view-all {
+      color: #3b82f6;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Animal Grid */
+    .animal-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .animal-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: #f8fafc;
+      border-radius: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .animal-card:hover {
+      background: #f1f5f9;
+    }
+
+    .animal-avatar {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+    }
+
+    .animal-info h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .animal-info p {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    /* Activity List */
+    .activity-list {
+      list-style: none;
+    }
+
+    .activity-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .activity-icon {
+      width: 40px;
+      height: 40px;
+      background: #f1f5f9;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #3b82f6;
+    }
+
+    .activity-details {
+      flex: 1;
+    }
+
+    .activity-details p {
+      font-size: 14px;
+      font-weight: 500;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .activity-time {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    /* Action Grid */
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .action-card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: 1px solid #f1f5f9;
+    }
+
+    .action-card:hover {
+      transform: translateY(-5px);
+      border-color: #3b82f6;
+      box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.1);
+    }
+
+    .action-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      color: white;
+      font-size: 24px;
+    }
+
+    .action-card h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+
+    .action-card p {
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    /* Chart Container */
+    .chart-container {
+      margin-top: 20px;
+      height: 250px;
+    }
+
+    /* Quick Actions */
+    .quick-actions {
+      margin-top: 30px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 20px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .dashboard {
+        flex-direction: column;
+      }
+
+      .header {
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .search-box input {
+        width: 150px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="dashboard">
+    <!-- ========== SIDEBAR ========== -->
+    <div class="sidebar">
+      <!-- Brand -->
+      <div class="brand">
+        <div class="brand-icon">
+          <i class="fas fa-paw"></i>
+        </div>
+        <div class="brand-text">
+          <h2>PetCare Admin</h2>
+          <p>v2.0.1</p>
+        </div>
+      </div>
+
+      <!-- Admin Profile -->
+      <div class="admin-profile">
+        <div class="admin-avatar">
+          <span>AD</span>
+        </div>
+        <div class="admin-info">
+          <h4>Admin User</h4>
+          <p>admin@petcare.com</p>
+        </div>
+      </div>
+
+      <!-- Navigation Menu -->
+      <div class="nav-menu">
+        <a href="#" class="nav-item active">
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="addAnimal__" class="nav-item">
+          <i class="fas fa-plus-circle"></i>
+          <span>Add Animal</span>
+        </a>
+        <a href="viewAnimal__" class="nav-item">
+          <i class="fas fa-paw"></i>
+          <span>View Animals</span>
+        </a>
+        <a href="viewUser__" class="nav-item">
+          <i class="fas fa-users"></i>
+          <span>View Users</span>
+        </a>
+        <a href="viewRating__" class="nav-item">
+          <i class="fas fa-star"></i>
+          <span>View Ratings</span>
+        </a>
+
+        <hr class="nav-divider">
+
+        <a href="changePassword__" class="nav-item">
+          <i class="fas fa-key"></i>
+          <span>Change Password</span>
+        </a>
+        <a href="/logoutt" class="nav-item">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <div class="main-content">
+      <!-- Header -->
+      <div class="header">
+        <div class="header-title">
+          <h1>Welcome back, Admin! 👋</h1>
+          <p>Here's what's happening with your pet management system today.</p>
+        </div>
+      </div>
+
+
+
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <h2 class="section-title">
+          <i class="fas fa-bolt" style="color: #f59e0b; margin-right: 10px;"></i>
+          Quick Actions
+        </h2>
+        <div class="action-grid">
+          <a href="addAnimal__" class="action-card">
+            <div class="action-icon">
+              <i class="fas fa-plus-circle"></i>
+            </div>
+            <h3>Add Animal</h3>
+            <p>Register a new pet to the system</p>
+          </a>
+
+          <a href="viewAnimal__" class="action-card">
+            <div class="action-icon">
+              <i class="fas fa-paw"></i>
+            </div>
+            <h3>View Animals</h3>
+            <p>Manage existing pet records</p>
+          </a>
+
+          <a href="viewUser__" class="action-card">
+            <div class="action-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <h3>View Users</h3>
+            <p>Manage user accounts</p>
+          </a>
+
+          <a href="viewRating__" class="action-card">
+            <div class="action-icon">
+              <i class="fas fa-star"></i>
+            </div>
+            <h3>View Ratings</h3>
+            <p>Check user feedback and reviews</p>
+          </a>
+
+          <a href="changePassword__" class="action-card">
+            <div class="action-icon">
+              <i class="fas fa-key"></i>
+            </div>
+            <h3>Change Password</h3>
+            <p>Update your account password</p>
+          </a>
+
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div style="margin-top: 40px; padding: 20px 0; border-top: 1px solid #e2e8f0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; color: #64748b; font-size: 13px;">
+          <p>© 2026 PetCare Admin Dashboard. All rights reserved.</p>
+          <div>
+            <a href="#" style="color: #64748b; text-decoration: none; margin-left: 20px;">Privacy Policy</a>
+            <a href="#" style="color: #64748b; text-decoration: none; margin-left: 20px;">Terms of Service</a>
+            <a href="#" style="color: #64748b; text-decoration: none; margin-left: 20px;">Help</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Mark active menu item based on current URL
+    document.addEventListener('DOMContentLoaded', function() {
+      const currentPage = window.location.pathname;
+      const navItems = document.querySelectorAll('.nav-item');
+
+      navItems.forEach(item => {
+        if (item.getAttribute('href') === currentPage) {
+          item.classList.add('active');
+        }
+      });
+
+      // Notification bell click effect
+      const notificationBtn = document.querySelector('.notification-btn');
+      notificationBtn.addEventListener('click', function() {
+        this.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          this.style.transform = 'scale(1)';
+        }, 200);
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,689 @@
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
+{#<html xmlns="http://www.w3.org/1999/xhtml">#}
+{#<head>#}
+{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
+{#<title>Untitled Document</title>#}
+{#</head>#}
+{##}
+{#<body>#}
+{#<center>#}
+{#<h1>EDIT ANIMAL DETAILS</h1>#}
+{#<form action="/edit_animal_post/{{ data.id }}" method="post" enctype="multipart/form-data">#}
+{#  <table width="200" border="1">#}
+{#    <tr>#}
+{#      <th scope="row">Nmae</th>#}
+{#      <td><label for="textfield"></label>#}
+{#      <input type="text" name="textfield" id="textfield" value="{{ data.name }}" /></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row">Photo</th>#}
+{#      <td><label for="fileField"></label>#}
+{#          <img src="{{ data.photo }}"  height="100" width="100" alt=""/>#}
+{#      <input type="file" name="photo" id="fileField" /></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row">Details</th>#}
+{#      <td><label for="textarea"></label>#}
+{#      <textarea name="textarea" id="textarea" cols="45" rows="5">{{ data.detail }}</textarea></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th colspan="2" scope="row"><input type="submit" name="button" id="button" value="Edit" /></th>#}
+{#    </tr>#}
+{#  </table>#}
+{#</form>#}
+{#</center>#}
+{#</body>#}
+{#</html>#}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Animal | Pet Management System</title>
+
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 700px;
+      background: white;
+      border-radius: 30px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+      padding: 40px;
+      animation: slideIn 0.6s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Header Section */
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .header-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+
+    .header-icon i {
+      font-size: 36px;
+      color: white;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+
+    .header p {
+      color: #666;
+      font-size: 15px;
+    }
+
+    /* Form Table - Maintaining table structure */
+    .animal-form {
+      width: 100%;
+    }
+
+    .form-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .form-table tr {
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .form-table tr:last-child {
+      border-bottom: none;
+    }
+
+    .form-table th {
+      width: 120px;
+      padding: 20px 15px;
+      text-align: left;
+      font-weight: 600;
+      color: #333;
+      font-size: 15px;
+      background: #f8fafc;
+      border-radius: 10px 0 0 10px;
+      vertical-align: top;
+    }
+
+    .form-table td {
+      padding: 15px;
+      background: white;
+    }
+
+    /* Form Elements */
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 14px 18px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s ease;
+      background: white;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+
+    /* Current Image Section */
+    .current-image-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .current-image-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #666;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .current-image-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .current-image {
+      width: 120px;
+      height: 120px;
+      border-radius: 16px;
+      object-fit: cover;
+      border: 4px solid white;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .current-image:hover {
+      transform: scale(1.05);
+      box-shadow: 0 15px 30px rgba(102, 126, 234, 0.3);
+    }
+
+    .image-badge {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 5px 10px rgba(102, 126, 234, 0.3);
+    }
+
+    /* File Input Styling */
+    .file-input-wrapper {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px dashed #e0e0e0;
+    }
+
+    .file-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #667eea;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    input[type="file"] {
+      position: relative;
+      width: 100%;
+      padding: 12px;
+      background: #f8fafc;
+      border: 2px dashed #667eea;
+      border-radius: 12px;
+      color: #333;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    input[type="file"]:hover {
+      border-color: #764ba2;
+      background: #f0f4ff;
+    }
+
+    input[type="file"]::file-selector-button {
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      margin-right: 15px;
+      transition: all 0.3s ease;
+    }
+
+    input[type="file"]::file-selector-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    /* Textarea */
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    /* Submit Button */
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none;
+      border-radius: 14px;
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+    }
+
+    .submit-btn i {
+      font-size: 18px;
+    }
+
+    /* Button Cell */
+    .button-cell {
+      text-align: center;
+      padding-top: 25px !important;
+      background: transparent !important;
+    }
+
+    /* Preview Section */
+    .preview-section {
+      margin-top: 25px;
+      padding: 20px;
+      background: #f8fafc;
+      border-radius: 16px;
+      display: none;
+    }
+
+    .preview-section.show {
+      display: block;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .preview-title {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .preview-image {
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: 16px;
+      border: 4px solid white;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    /* Info Message */
+    .info-message {
+      background: #f0f4ff;
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #667eea;
+      font-size: 14px;
+      border-left: 4px solid #667eea;
+    }
+
+    .info-message i {
+      font-size: 16px;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .container {
+        padding: 25px;
+      }
+
+      .form-table,
+      .form-table tbody,
+      .form-table tr,
+      .form-table th,
+      .form-table td {
+        display: block;
+      }
+
+      .form-table th {
+        width: 100%;
+        padding: 15px 15px 5px 15px;
+        border-radius: 10px 10px 0 0;
+      }
+
+      .form-table td {
+        padding: 5px 15px 15px 15px;
+      }
+
+      .header h1 {
+        font-size: 26px;
+      }
+
+      .current-image-wrapper {
+        display: flex;
+        justify-content: center;
+      }
+    }
+
+    /* Error States */
+    .error {
+      border-color: #ff4444 !important;
+    }
+
+    .error-message {
+      color: #ff4444;
+      font-size: 12px;
+      margin-top: 5px;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
+    /* Loading State */
+    .submit-btn.loading {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .submit-btn.loading i {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Character Counter */
+    .char-counter {
+      text-align: right;
+      font-size: 12px;
+      color: #999;
+      margin-top: 5px;
+    }
+
+    .char-counter i {
+      color: #667eea;
+      margin-right: 4px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Header with Icon -->
+    <div class="header">
+      <div class="header-icon">
+        <i class="fas fa-paw"></i>
+      </div>
+      <h1>✏️ Edit Animal Details</h1>
+      <p>Update the information for {{ data.name }}</p>
+    </div>
+
+    <!-- Info Message -->
+    <div class="info-message">
+      <i class="fas fa-info-circle"></i>
+      <span>Leave the photo field empty to keep the current image</span>
+    </div>
+
+    <!-- Form - Maintains same action and method with Django template syntax -->
+    <form action="/edit_animal_post/{{ data.id }}" method="post" enctype="multipart/form-data" class="animal-form" id="animalForm">
+      <table class="form-table" border="0">
+        <!-- Name Field -->
+        <tr>
+          <th scope="row">
+            <i class="fas fa-tag" style="color: #667eea; margin-right: 8px;"></i>
+            Name
+          </th>
+          <td>
+            <input type="text" name="textfield" id="textfield" value="{{ data.name }}" placeholder="Enter animal name" />
+            <div class="error-message" id="nameError">Please enter animal name</div>
+          </td>
+        </tr>
+
+        <!-- Photo Field - Shows current image and file upload -->
+        <tr>
+          <th scope="row">
+            <i class="fas fa-camera" style="color: #667eea; margin-right: 8px;"></i>
+            Photo
+          </th>
+          <td>
+            <div class="current-image-container">
+              <!-- Current Image Display -->
+              <div class="current-image-label">
+                <i class="fas fa-image"></i>
+                Current Image:
+              </div>
+              <div class="current-image-wrapper">
+                <img src="{{ data.photo }}" alt="{{ data.name }}" class="current-image" id="currentImage" onerror="this.src='https://via.placeholder.com/120x120?text=No+Image'"/>
+                <span class="image-badge">
+                  <i class="fas fa-check-circle"></i> Current
+                </span>
+              </div>
+
+              <!-- File Upload Section -->
+              <div class="file-input-wrapper">
+                <div class="file-label">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  Upload New Image (Optional):
+                </div>
+                <input type="file" name="photo" id="fileField" accept="image/*" />
+                <div style="font-size: 12px; color: #999; margin-top: 5px;">
+                  <i class="fas fa-info-circle"></i> Leave empty to keep current image. Max size: 5MB
+                </div>
+              </div>
+            </div>
+            <div class="error-message" id="fileError">Please select a valid image file</div>
+          </td>
+        </tr>
+
+        <!-- Details Field -->
+        <tr>
+          <th scope="row">
+            <i class="fas fa-file-alt" style="color: #667eea; margin-right: 8px;"></i>
+            Details
+          </th>
+          <td>
+            <textarea name="textarea" id="textarea" placeholder="Enter animal details (breed, age, description, special needs, etc.)">{{ data.detail }}</textarea>
+            <div class="char-counter">
+              <i class="fas fa-text-height"></i>
+              <span id="charCount">{{ data.detail|length }}</span>/500 characters
+            </div>
+            <div class="error-message" id="detailsError">Please enter details</div>
+          </td>
+        </tr>
+
+        <!-- Submit Button -->
+        <tr>
+          <td colspan="2" class="button-cell">
+            <button type="submit" class="submit-btn" id="submitBtn">
+              <i class="fas fa-save"></i>
+              UPDATE ANIMAL
+            </button>
+          </td>
+        </tr>
+      </table>
+    </form>
+
+    <!-- New Image Preview Section -->
+    <div class="preview-section" id="previewSection">
+      <div class="preview-title">
+        <i class="fas fa-eye" style="color: #667eea;"></i>
+        New Image Preview
+      </div>
+      <img id="previewImage" class="preview-image" src="" alt="Preview" />
+    </div>
+
+    <!-- Back Link -->
+    <div style="text-align: center; margin-top: 25px;">
+      <a href="/viewAnimal__" style="color: #667eea; text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 10px; transition: all 0.3s ease;">
+        <i class="fas fa-arrow-left"></i>
+        Back to Animal List
+      </a>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Image Preview for new image
+    const fileInput = document.getElementById('fileField');
+    const previewSection = document.getElementById('previewSection');
+    const previewImage = document.getElementById('previewImage');
+
+    fileInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        // Validate file size (5MB limit)
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        if (file.size > maxSize) {
+          alert('File size too large. Maximum size is 5MB.');
+          this.value = '';
+          previewSection.classList.remove('show');
+          return;
+        }
+
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+          alert('Please select an image file.');
+          this.value = '';
+          previewSection.classList.remove('show');
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          previewImage.src = e.target.result;
+          previewSection.classList.add('show');
+        }
+        reader.readAsDataURL(file);
+      } else {
+        previewSection.classList.remove('show');
+      }
+    });
+
+    // Character counter for details
+    const detailsInput = document.getElementById('textarea');
+    const charCount = document.getElementById('charCount');
+
+    detailsInput.addEventListener('input', function() {
+      const count = this.value.length;
+      charCount.textContent = count;
+
+      // Visual warning at 450 characters
+      if (count > 450) {
+        charCount.style.color = '#ff4444';
+      } else {
+        charCount.style.color = '#667eea';
+      }
+    });
+
+    // Form Validation
+    const form = document.getElementById('animalForm');
+    const nameInput = document.getElementById('textfield');
+    const detailsInput = document.getElementById('textarea');
+    const submitBtn = document.getElementById('submitBtn');
+
+    // Real-time validation
+    nameInput.addEventListener('input', function() {
+      if (this.value.trim()) {
+        this.classList.remove('error');
+        document.getElementById('nameError').classList.remove('show');
+      }
+    });
+
+    detailsInput.addEventListener('input', function() {
+      if (this.value.trim()) {
+        this.classList.remove('error');
+        document.getElementById('detailsError').classList.remove('show');
+      }
+    });
+
+    fileInput.addEventListener('change', function() {
+      this.classList.remove('error');
+      document.getElementById('fileError').classList.remove('show');
+    });
+
+    // Input focus effects
+    const inputs = document.querySelectorAll('input[type="text"], textarea, input[type="file"]');
+    inputs.forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'scale(1.01)';
+      });
+
+      input.addEventListener('blur', function() {
+        this.parentElement.style.transform = 'scale(1)';
+      });
+    });
+
+    // Handle current image error
+    const currentImage = document.getElementById('currentImage');
+    currentImage.onerror = function() {
+      this.src = 'https://via.placeholder.com/120x120?text=No+Image';
+    };
+
+    // Confirm before leaving if form is dirty
+    let formDirty = false;
+    form.addEventListener('input', function() {
+      formDirty = true;
+    });
+
+    window.addEventListener('beforeunload', function(e) {
+      if (formDirty) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,776 @@
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
+{#<html xmlns="http://www.w3.org/1999/xhtml">#}
+{#<head>#}
+{#<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />#}
+{#<title>Untitled Document</title>#}
+{#</head>#}
+{##}
+{#<body>#}
+{#<center>#}
+{#<h1>VIEW BREED DETAILS</h1>#}
+{#<form action="" method="get">#}
+{#  <table width="200" border="1">#}
+{#    <tr>#}
+{#      <th scope="col">SL.No</th>#}
+{#      <th scope="col">Breed</th>#}
+{#      <th scope="col">Photo</th>#}
+{#      <th scope="col">Details</th>#}
+{#         <th scope="col">Action</th>#}
+{#    </tr>#}
+{#      {% for i in data %}#}
+{#    <tr>#}
+{#      <td>{{ forloop.counter }}</td>#}
+{#      <td>{{ i.breed }}</td>#}
+{#      <td><img src="{{ i.photo }}" height="100" width="100"> </td>#}
+{#     <td>{{ i.details }}</td>#}
+{#    <td><a href="/editBreed__/{{ i.id }}">EDIT</a> </td>#}
+{#    </tr>#}
+{#       {% endfor %}#}
+{#  </table>#}
+{#</form>#}
+{#</center>#}
+{#</body>#}
+{#</html>#}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Breeds | Pet Management System</title>
+
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 30px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+      padding: 40px;
+      animation: slideIn 0.6s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Header Section */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .header-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header-icon i {
+      font-size: 28px;
+      color: white;
+    }
+
+    .header-title h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .header-title p {
+      color: #666;
+      font-size: 15px;
+    }
+
+    .header-stats {
+      display: flex;
+      gap: 20px;
+    }
+
+    .stat-badge {
+      background: #f8fafc;
+      padding: 12px 24px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .stat-badge i {
+      color: #667eea;
+      font-size: 20px;
+    }
+
+    .stat-badge span {
+      font-weight: 700;
+      color: #1a1a1a;
+      font-size: 18px;
+    }
+
+    /* Search & Filter Bar */
+    .search-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      gap: 20px;
+    }
+
+    .search-box {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 8px 20px;
+      border: 1px solid #e0e0e0;
+      transition: all 0.3s ease;
+    }
+
+    .search-box:focus-within {
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+
+    .search-box i {
+      color: #999;
+      margin-right: 12px;
+    }
+
+    .search-box input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 14px 0;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .filter-btn {
+      background: white;
+      border: 1px solid #e0e0e0;
+      padding: 14px 24px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 500;
+      color: #1a1a1a;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn:hover {
+      background: #f8fafc;
+      border-color: #667eea;
+    }
+
+    .add-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .add-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    /* Table Container */
+    .table-container {
+      overflow-x: auto;
+      border-radius: 16px;
+      margin-top: 20px;
+    }
+
+    /* Modern Table Design */
+    .breed-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 16px;
+    }
+
+    .breed-table thead {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+
+    .breed-table th {
+      color: white;
+      font-weight: 600;
+      padding: 18px 16px;
+      text-align: left;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .breed-table th:first-child {
+      border-radius: 16px 0 0 0;
+    }
+
+    .breed-table th:last-child {
+      border-radius: 0 16px 0 0;
+    }
+
+    .breed-table td {
+      padding: 20px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      color: #333;
+      font-size: 15px;
+      vertical-align: middle;
+    }
+
+    .breed-table tbody tr {
+      transition: all 0.3s ease;
+    }
+
+    .breed-table tbody tr:hover {
+      background: #f8fafc;
+      transform: scale(1.01);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    /* Breed Info with Image */
+    .breed-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .breed-image {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      object-fit: cover;
+      border: 3px solid white;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .breed-name {
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .breed-details {
+      max-width: 350px;
+      white-space: normal;
+      line-height: 1.6;
+      color: #666;
+      font-size: 14px;
+    }
+
+    /* Serial Number Badge */
+    .serial-badge {
+      width: 35px;
+      height: 35px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    /* Action Buttons */
+    .action-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-edit {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-edit:hover {
+      background: #5a6fd8;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-view {
+      background: #8b5cf6;
+      color: white;
+    }
+
+    .btn-view:hover {
+      background: #7c4dff;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+    }
+
+    /* Breed Badge */
+    .breed-badge {
+      background: #f0f4ff;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: #667eea;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .breed-badge i {
+      font-size: 11px;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .empty-state i {
+      font-size: 64px;
+      color: #667eea;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+
+    .empty-state h3 {
+      font-size: 20px;
+      color: #1a1a1a;
+      margin-bottom: 10px;
+    }
+
+    .empty-state p {
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    /* Pagination */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .page-btn {
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #e0e0e0;
+      background: white;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .page-btn.active {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+    }
+
+    .page-btn:hover:not(.active) {
+      border-color: #667eea;
+      color: #667eea;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .container {
+        padding: 25px;
+      }
+
+      .header {
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+      }
+
+      .header-stats {
+        width: 100%;
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 20px 15px;
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      .search-bar {
+        flex-direction: column;
+      }
+
+      .search-box {
+        width: 100%;
+      }
+
+      .filter-btn, .add-btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .header-title h1 {
+        font-size: 26px;
+      }
+
+      .action-group {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    /* Animal Link */
+    .animal-link {
+      color: #667eea;
+      text-decoration: none;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .animal-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Details Preview */
+    .details-preview {
+      max-width: 350px;
+    }
+
+    .details-preview .full-details {
+      display: none;
+      position: absolute;
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      z-index: 100;
+    }
+
+    .details-preview:hover .full-details {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Header Section -->
+    <div class="header">
+      <div class="header-left">
+        <div class="header-icon">
+          <i class="fas fa-dna"></i>
+        </div>
+        <div class="header-title">
+          <h1>🧬 Breed Management</h1>
+          <p>View and manage all registered breeds</p>
+        </div>
+      </div>
+      <div class="header-stats">
+        <div class="stat-badge">
+          <i class="fas fa-dna"></i>
+          <span>{{ data|length }}</span>
+          <span style="color: #666; font-weight: normal;">Total Breeds</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search & Filter Bar -->
+    <div class="search-bar">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search by breed name or details..." onkeyup="filterTable()">
+      </div>
+      <a href="/addBreed__/{{ animal_id }}" class="add-btn">
+        <i class="fas fa-plus-circle"></i>
+        Add New Breed
+      </a>
+    </div>
+
+    <!-- Table Container -->
+    <div class="table-container">
+      <form action="" method="get" id="breedForm">
+        <table class="breed-table" id="breedTable">
+          <thead>
+            <tr>
+              <th width="80">SL.NO</th>
+              <th width="180">BREED</th>
+              <th width="120">PHOTO</th>
+              <th width="400">DETAILS</th>
+              <th width="150">ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in data %}
+            <tr>
+              <td>
+                <div class="serial-badge">{{ forloop.counter }}</div>
+              </td>
+              <td>
+                <div class="breed-info">
+                  <div>
+                    <span class="breed-name">{{ i.breed }}</span>
+
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div style="position: relative;">
+                  <img src="{{ i.photo }}" alt="Breed" width="80" height="80" style="border-radius: 12px; object-fit: cover; border: 3px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1);" onerror="this.src='https://via.placeholder.com/80x80?text=No+Image'">
+                </div>
+              </td>
+              <td>
+                <div class="breed-details">
+                  <div class="details-preview">
+                    <i class="fas fa-info-circle" style="color: #667eea; margin-right: 6px;"></i>
+                    {{ i.details|truncatechars:100 }}
+                    {% if i.details|length > 100 %}
+                      <span style="color: #667eea; font-size: 12px; cursor: pointer;" onclick="alert('{{ i.details|escapejs }}')">
+                        <i class="fas fa-eye"></i> Read more
+                      </span>
+                    {% endif %}
+                  </div>
+                  <div style="margin-top: 8px;">
+                    <span class="breed-badge">
+                      <i class="fas fa-font"></i>
+                      {{ i.details|length }} chars
+                    </span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="action-group">
+                  <a href="/editBreed__/{{ i.id }}" class="btn btn-edit">
+                    <i class="fas fa-edit"></i>
+                    EDIT
+                  </a>
+                  <a href="/viewAnimal__" class="btn btn-view" style="background: #8b5cf6;">
+                    <i class="fas fa-paw"></i>
+                    ANIMAL
+                  </a>
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="5">
+                <div class="empty-state">
+                  <i class="fas fa-dna"></i>
+                  <h3>No Breeds Found</h3>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </form>
+    </div>
+
+    <!-- Pagination -->
+    {% if data.has_other_pages %}
+    <div class="pagination">
+      {% if data.has_previous %}
+      <a href="?page={{ data.previous_page_number }}" class="page-btn">
+        <i class="fas fa-chevron-left"></i>
+      </a>
+      {% endif %}
+
+      {% for i in data.paginator.page_range %}
+        {% if data.number == i %}
+        <span class="page-btn active">{{ i }}</span>
+        {% else %}
+        <a href="?page={{ i }}" class="page-btn">{{ i }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if data.has_next %}
+      <a href="?page={{ data.next_page_number }}" class="page-btn">
+        <i class="fas fa-chevron-right"></i>
+      </a>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Footer -->
+    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #f0f0f0; text-align: center; color: #999; font-size: 13px;">
+      <i class="fas fa-dna" style="color: #667eea; margin-right: 5px;"></i>
+      Pet Management System • {{ data|length }} Breeds • Last updated: {% now "F j, Y" %}
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Search/Filter Function
+    function filterTable() {
+      const input = document.getElementById('searchInput');
+      const filter = input.value.toUpperCase();
+      const table = document.getElementById('breedTable');
+      const tr = table.getElementsByTagName('tr');
+
+      for (let i = 1; i < tr.length; i++) {
+        let display = false;
+        const tdName = tr[i].getElementsByTagName('td')[1];
+        const tdDetails = tr[i].getElementsByTagName('td')[3];
+
+        if (tdName || tdDetails) {
+          const nameValue = tdName ? (tdName.textContent || tdName.innerText) : '';
+          const detailsValue = tdDetails ? (tdDetails.textContent || tdDetails.innerText) : '';
+
+          if (nameValue.toUpperCase().indexOf(filter) > -1 ||
+              detailsValue.toUpperCase().indexOf(filter) > -1) {
+            display = true;
+          }
+        }
+
+        if (tr[i].style) {
+          tr[i].style.display = display ? '' : 'none';
+        }
+      }
+    }
+
+
+
+    // Image error handling
+    document.addEventListener('DOMContentLoaded', function() {
+      const images = document.querySelectorAll('img');
+      images.forEach(img => {
+        img.onerror = function() {
+          this.src = 'https://via.placeholder.com/80x80?text=No+Image';
+        };
+      });
+    });
+
+    // Add smooth hover effects
+    const rows = document.querySelectorAll('.breed-table tbody tr');
+    rows.forEach(row => {
+      row.addEventListener('mouseenter', function() {
+        this.style.backgroundColor = '#f8fafc';
+      });
+
+      row.addEventListener('mouseleave', function() {
+        this.style.backgroundColor = '';
+      });
+    });
+
+    // Character counter for search
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+      searchInput.addEventListener('keyup', function(e) {
+        if (e.key === 'Escape') {
+          this.value = '';
+          filterTable();
+        }
+      });
+    }
+
+
+    // Initialize tooltips
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add export button to header stats
+      const headerStats = document.querySelector('.header-stats');
+      if (headerStats) {
+        const exportBtn = document.createElement('div');
+        exportBtn.className = 'stat-badge';
+        exportBtn.style.cursor = 'pointer';
+        exportBtn.onclick = exportTable;
+        exportBtn.innerHTML = '<i class="fas fa-download"></i><span>Export</span>';
+        headerStats.appendChild(exportBtn);
+      }
+    });
+
+    // Responsive table helper
+    function checkTableOverflow() {
+      const tableContainer = document.querySelector('.table-container');
+      if (tableContainer) {
+        if (tableContainer.scrollWidth > tableContainer.clientWidth) {
+          tableContainer.style.overflowX = 'auto';
+        }
+      }
+    }
+
+    window.addEventListener('resize', checkTableOverflow);
+    window.addEventListener('load', checkTableOverflow);
+  </script>
+</body>
+</html>
